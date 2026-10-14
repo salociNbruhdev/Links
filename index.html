@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>salo.mp4 — links</title>
+    <meta name="description" content="Meus links: YouTube, TikTok, Discord e contato.">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%B4%3C/text%3E%3C/svg%3E">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+            color: #ff0000;
+            font-family: 'Monaco', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container { width: 100%; max-width: 600px; }
+
+        .mac-window {
+            background: #1a1a1a;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .mac-titlebar {
+            background: linear-gradient(180deg, #383838 0%, #2a2a2a 100%);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #222;
+        }
+
+        .mac-button { width: 12px; height: 12px; border-radius: 50%; }
+        .close-btn { background: #ff5f56; }
+        .minimize-btn { background: #ffbd2e; }
+        .maximize-btn { background: #27c93f; }
+
+        .titlebar-text {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            margin-left: -27px;
+        }
+
+        .terminal-content { padding: 30px; min-height: 500px; }
+
+        .header { margin-bottom: 30px; text-align: center; }
+
+        .header h1 {
+            font-size: 24px;
+            color: #ff0000;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .header p { color: #888; font-size: 12px; letter-spacing: 1px; }
+
+        .status-line {
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 8px 0;
+            margin: 20px 0;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+
+        .category { margin-bottom: 25px; }
+
+        .category-title {
+            color: #ff0000;
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .links-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .link-item {
+            background: #111;
+            border: 1px solid #333;
+            padding: 12px 15px;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #ff0000;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before { content: '→'; opacity: 0; transition: opacity 0.3s; }
+
+        .link-item:hover {
+            background: #1a1a1a;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            padding-left: 20px;
+        }
+
+        .link-item:hover::before { opacity: 1; }
+
+        .link-text { flex: 1; }
+        .link-icon { font-size: 14px; min-width: 20px; text-align: center; }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #ff0000;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { background: #ff0000; }
+            50%, 100% { background: transparent; }
+        }
+
+        .divider { border-top: 1px dashed #333; margin: 20px 0; }
+
+        /* Último vídeo do YouTube */
+        .video-card {
+            display: block;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 3px;
+            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .video-card:hover {
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .video-thumb {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #1a0000 0%, #0a0a0a 100%);
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .video-thumb img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-play {
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 14px rgba(255, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
+            font-size: 20px;
+            padding-left: 3px;
+        }
+
+        .video-info { padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+
+        .video-platform {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .video-title {
+            font-size: 13px;
+            color: #ff0000;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .video-card.loading { opacity: 0.6; }
+
+        .pix-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #ff0000;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        .pix-footer:hover {
+            background: #1a0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .pix-icon { font-size: 16px; }
+        .pix-text { letter-spacing: 0.5px; }
+
+        @media (max-width: 600px) {
+            .terminal-content { padding: 20px; }
+            .header h1 { font-size: 18px; }
+            .link-item { font-size: 12px; padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mac-window">
+            <div class="mac-titlebar">
+                <div class="mac-button close-btn"></div>
+                <div class="mac-button minimize-btn"></div>
+                <div class="mac-button maximize-btn"></div>
+                <div class="titlebar-text">terminal — salo.mp4</div>
+            </div>
+
+            <div class="terminal-content">
+                <div class="header">
+                    <h1>$ salo.mp4<span class="cursor"></span></h1>
+                    <p>» agregador de links</p>
+                </div>
+
+                <div class="status-line">
+                    [SYSTEM ACTIVE] • Links: 12 • Updated: 2026.10.13
+                </div>
+
+                <!-- REDES SOCIAIS -->
+                <div class="category">
+                    <div class="category-title">📱 redes sociais</div>
+                    <div class="links-group">
+                        <a href="https://www.tiktok.com/@salocin.mp3?_r=1&_t=ZS-9AXMaK5DlBu" target="_blank" rel="noopener" class="link-item">
+                            <span class="link-icon">🎵</span>
+                            <span class="link-text">TikTok</span>
+                        </a>
+                        <a href="https://youtube.com/@salocin.mp4?si=voNSaimtWSIJIbME" target="_blank" rel="noopener" class="link-item">
+                            <span class="link-icon">▶️</span>
+                            <span class="link-text">YouTube</span>
+                        </a>
+                        <a href="https://discord.gg/a3uuCjFEQ8" target="_blank" rel="noopener" class="link-item">
+                            <span class="link-icon">🎮</span>
+                            <span class="link-text">Servidor Discord</span>
+                        </a>
+                        <div class="link-item" style="cursor: not-allowed; opacity: 0.6;">
+                            <span class="link-icon">📢</span>
+                            <span class="link-text">Telegram <span style="font-size: 11px; color: #888;">(em breve)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- ÚLTIMO VÍDEO (YouTube) -->
+                <div class="category">
+                    <div class="category-title">🎬 último vídeo</div>
+                    <a id="latestVideo" class="video-card loading" href="https://youtube.com/@salocin.mp4?si=voNSaimtWSIJIbME" target="_blank" rel="noopener">
+                        <div class="video-thumb" id="videoThumb">⏳</div>
+                        <div class="video-info">
+                            <div class="video-platform">YouTube</div>
+                            <div class="video-title" id="videoTitle">Carregando...</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- CONTATO -->
+                <div class="category">
+                    <div class="category-title">📞 contato</div>
+                    <div class="links-group">
+                        <a href="mailto:nicolasrosset93@gmail.com" class="link-item">
+                            <span class="link-icon">📧</span>
+                            <span class="link-text">E-mail</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- PORTFÓLIO -->
+                <div class="category">
+                    <div class="category-title">💼 portfólio <span style="font-size: 11px; color: #888;">(em breve)</span></div>
+                </div>
+
+                <div id="pix-footer" class="pix-footer">
+                    <span class="pix-icon">💰</span>
+                    <span class="pix-text">pix: nicolasrosset93@gmail.com</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== Copiar PIX =====
+        document.getElementById('pix-footer').addEventListener('click', function () {
+            const textEl = this.querySelector('.pix-text');
+            const original = textEl.textContent;
+            navigator.clipboard.writeText('nicolasrosset93@gmail.com').then(() => {
+                textEl.textContent = '✓ copiado!';
+                setTimeout(() => { textEl.textContent = original; }, 2000);
+            }).catch(() => {
+                textEl.textContent = 'não foi possível copiar';
+                setTimeout(() => { textEl.textContent = original; }, 2000);
+            });
+        });
+
+        // ===== Último vídeo do YouTube =====
+        const CHANNEL_ID = 'UC6wmSdYfOUVmfba_kqiM32Q';
+        const FEED_URL = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
+
+        function withTimeout(url, ms) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), ms);
+            return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer));
+        }
+
+        // Fonte 1: rss2json (devolve JSON pronto)
+        async function fromRss2Json() {
+            const res = await withTimeout('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(FEED_URL), 6000);
+            const data = await res.json();
+            if (data.status !== 'ok' || !data.items || !data.items.length) throw new Error('rss2json vazio');
+            const item = data.items[0];
+            const id = new URL(item.link).searchParams.get('v');
+            if (!id) throw new Error('sem id');
+            return { id: id, title: item.title, link: item.link };
+        }
+
+        // Fonte 2 (reserva): proxy simples + leitura do XML do feed
+        async function fromProxy() {
+            const res = await withTimeout('https://api.allorigins.win/raw?url=' + encodeURIComponent(FEED_URL), 6000);
+            const xml = new DOMParser().parseFromString(await res.text(), 'application/xml');
+            const entry = xml.getElementsByTagName('entry')[0];
+            if (!entry) throw new Error('feed vazio');
+            const id = entry.getElementsByTagName('yt:videoId')[0].textContent;
+            const title = entry.getElementsByTagName('title')[0].textContent;
+            return { id: id, title: title, link: 'https://www.youtube.com/watch?v=' + id };
+        }
+
+        async function loadLatestVideo() {
+            const card = document.getElementById('latestVideo');
+            const thumb = document.getElementById('videoThumb');
+            const title = document.getElementById('videoTitle');
+
+            let video = null;
+            try { video = await fromRss2Json(); }
+            catch (e) {
+                try { video = await fromProxy(); } catch (e2) { video = null; }
+            }
+
+            if (!video) {
+                // Reserva final: card simples que abre o canal
+                thumb.textContent = '▶️';
+                title.textContent = 'Ver canal no YouTube';
+                card.classList.remove('loading');
+                return;
+            }
+
+            card.href = video.link;
+            title.textContent = video.title; // textContent evita injeção de HTML
+
+            const img = new Image();
+            img.alt = '';
+            img.onload = function () {
+                thumb.textContent = '';
+                thumb.appendChild(img);
+                const play = document.createElement('div');
+                play.className = 'video-play';
+                play.textContent = '▶';
+                thumb.appendChild(play);
+            };
+            img.onerror = function () { thumb.textContent = '▶️'; };
+            img.src = 'https://i.ytimg.com/vi/' + video.id + '/hqdefault.jpg';
+
+            card.classList.remove('loading');
+        }
+
+        loadLatestVideo();
+    </script>
+</body>
+</html>
