@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HD de Jogos Xbox 360 — salo.mp4</title>
+    <meta name="description" content="Orçamento de HD com jogos Xbox 360.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+            color: #ff0000;
+            font-family: 'Monaco', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container { width: 100%; max-width: 750px; }
+
+        .mac-window {
+            background: #1a1a1a;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .mac-titlebar {
+            background: linear-gradient(180deg, #383838 0%, #2a2a2a 100%);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #222;
+        }
+
+        .mac-button { width: 12px; height: 12px; border-radius: 50%; }
+        .close-btn { background: #ff5f56; }
+        .minimize-btn { background: #ffbd2e; }
+        .maximize-btn { background: #27c93f; }
+
+        .titlebar-text {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            margin-left: -27px;
+        }
+
+        .terminal-content { padding: 30px; min-height: 800px; }
+
+        .header { margin-bottom: 25px; text-align: center; }
+
+        .header h1 {
+            font-size: 20px;
+            color: #ff0000;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .header p { color: #888; font-size: 12px; letter-spacing: 1px; }
+
+        .controles {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-genero {
+            background: #111;
+            border: 1px solid #333;
+            color: #ff0000;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .btn-genero:hover, .btn-genero.ativo {
+            background: #1a1a1a;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            background: #111;
+            border: 1px solid #333;
+            color: #ff0000;
+            padding: 12px 15px;
+            padding-left: 35px;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .search-box::placeholder { color: #666; }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            pointer-events: none;
+        }
+
+        .lista-jogos {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .lista-jogos::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .lista-jogos::-webkit-scrollbar-track {
+            background: #0a0a0a;
+            border-radius: 4px;
+        }
+
+        .lista-jogos::-webkit-scrollbar-thumb {
+            background: #ff3b3b;
+            border-radius: 4px;
+        }
+
+        .lista-jogos::-webkit-scrollbar-thumb:hover {
+            background: #ff5f56;
+        }
+
+        .jogo {
+            background: #111;
+            border: 1px solid #333;
+            padding: 12px 15px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .jogo:hover {
+            background: #1a1a1a;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .jogo.oculto { display: none; }
+
+        .jogo input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ff0000;
+            flex-shrink: 0;
+        }
+
+        .jogo-info { flex: 1; }
+
+        .jogo-titulo {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .jogo-meta {
+            color: #888;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .sem-resultados {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 13px;
+        }
+
+        .contador {
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+            background: #0a0a0a;
+        }
+
+        .contador-texto {
+            color: #ff0000;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-orcamento {
+            width: 100%;
+            background: #ff0000;
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .btn-orcamento:hover {
+            background: #ff3b3b;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .btn-orcamento:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .aviso {
+            color: #ff5c5c;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .terminal-content { padding: 20px; }
+            .header h1 { font-size: 16px; }
+            .controles { gap: 6px; }
+            .btn-genero { font-size: 11px; padding: 6px 10px; }
+            .lista-jogos { max-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mac-window">
+            <div class="mac-titlebar">
+                <div class="mac-button close-btn"></div>
+                <div class="mac-button minimize-btn"></div>
+                <div class="mac-button maximize-btn"></div>
+                <div class="titlebar-text">hd-jogos — Xbox 360 (293 títulos)</div>
+            </div>
+
+            <div class="terminal-content">
+                <div class="header">
+                    <h1>$ comprar hd de jogos<span style="animation: blink 1s infinite;">_</span></h1>
+                    <p>» lista de jogos</p>
+                </div>
+
+                <div class="controles" id="controles"></div>
+
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-box" id="searchBox" placeholder="Pesquisar por nome do jogo...">
+                </div>
+
+                <div class="lista-jogos" id="listaJogos"></div>
+
+                <div id="semResultados" class="sem-resultados" style="display:none;">
+                    Nenhum jogo encontrado com esse critério.
+                </div>
+
+                <div class="contador">
+                    <div class="contador-texto">
+                        Jogos selecionados: <span id="total">0</span> / 293
+                    </div>
+                </div>
+
+                <button class="btn-orcamento" id="btnOrcamento" disabled>
+                    Enviar lista pelo WhatsApp
+                </button>
+
+                <div class="aviso">
+                    💬 Você receberá a lista e combinaremos o melhor preço
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const JOGOS = [
+            { titulo: "Ace Combat 6: Fires of Liberation", genero: "Ação/Voo", ano: 2007 },
+            { titulo: "Ace Combat: Assault Horizon", genero: "Ação/Voo", ano: 2011 },
+            { titulo: "Alan Wake", genero: "Horror/Ação", ano: 2010 },
+            { titulo: "Alan Wake's American Nightmare", genero: "Horror/Ação", ano: 2012 },
+            { titulo: "Aliens vs. Predator", genero: "FPS/Horror", ano: 2010 },
+            { titulo: "Aliens: Colonial Marines", genero: "FPS/Horror", ano: 2013 },
+            { titulo: "Alone in the Dark", genero: "Horror/Ação", ano: 2008 },
+            { titulo: "Amazing Spider-Man, The", genero: "Aventura/Ação", ano: 2012 },
+            { titulo: "Amazing Spider-Man 2, The", genero: "Aventura/Ação", ano: 2014 },
+            { titulo: "Assassin's Creed", genero: "Aventura/Ação", ano: 2007 },
+            { titulo: "Assassin's Creed II", genero: "Aventura/Ação", ano: 2009 },
+            { titulo: "Assassin's Creed III", genero: "Aventura/Ação", ano: 2012 },
+            { titulo: "Assassin's Creed IV: Black Flag", genero: "Aventura/Ação", ano: 2013 },
+            { titulo: "Assassin's Creed: Brotherhood", genero: "Aventura/Ação", ano: 2010 },
+            { titulo: "Batman: Arkham Asylum", genero: "Aventura/Ação", ano: 2009 },
+            { titulo: "Batman: Arkham City", genero: "Aventura/Ação", ano: 2011 },
+            { titulo: "Batman: Arkham Origins", genero: "Aventura/Ação", ano: 2013 },
+            { titulo: "Bayonetta", genero: "Ação", ano: 2009 },
+            { titulo: "Bayonetta 2", genero: "Ação", ano: 2014 },
+            { titulo: "Bionic Commando", genero: "Ação/Plataforma", ano: 2009 },
+            { titulo: "Bioshock", genero: "FPS/Ação", ano: 2007 },
+            { titulo: "Bioshock 2", genero: "FPS/Ação", ano: 2010 },
+            { titulo: "Bioshock Infinite", genero: "FPS/Ação", ano: 2013 },
+            { titulo: "Blazblue: Continuum Shift", genero: "Luta", ano: 2010 },
+            { titulo: "Blazing Angels: Squadrons of WWII", genero: "Ação/Voo", ano: 2006 },
+            { titulo: "Blue Dragon", genero: "RPG/JRPG", ano: 2006 },
+            { titulo: "Borderlands", genero: "FPS/RPG", ano: 2009 },
+            { titulo: "Borderlands 2", genero: "FPS/RPG", ano: 2012 },
+            { titulo: "Bourne Conspiracy, The", genero: "Ação/Aventura", ano: 2008 },
+            { titulo: "Burnout Paradise", genero: "Corrida/Ação", ano: 2008 },
+            { titulo: "Call of Duty 2", genero: "Ação/FPS", ano: 2005 },
+            { titulo: "Call of Duty 3", genero: "Ação/FPS", ano: 2006 },
+            { titulo: "Call of Duty 4: Modern Warfare", genero: "Ação/FPS", ano: 2007 },
+            { titulo: "Call of Duty: Black Ops", genero: "Ação/FPS", ano: 2010 },
+            { titulo: "Call of Duty: Black Ops 2", genero: "Ação/FPS", ano: 2012 },
+            { titulo: "Call of Duty: Ghosts", genero: "Ação/FPS", ano: 2013 },
+            { titulo: "Call of Duty: Modern Warfare 2", genero: "Ação/FPS", ano: 2009 },
+            { titulo: "Call of Duty: Modern Warfare 3", genero: "Ação/FPS", ano: 2011 },
+            { titulo: "Call of Duty: World at War", genero: "Ação/FPS", ano: 2008 },
+            { titulo: "Captain America: Super Soldier", genero: "Ação/Aventura", ano: 2011 },
+            { titulo: "Chronicles of Narnia, The: The Lion, the Witch and the Wardrobe", genero: "Aventura/Ação", ano: 2005 },
+            { titulo: "Colin McRae DiRT", genero: "Corrida", ano: 2007 },
+            { titulo: "Company of Heroes", genero: "Estratégia", ano: 2006 },
+            { titulo: "Company of Heroes 2", genero: "Estratégia", ano: 2013 },
+            { titulo: "Company of Heroes Online", genero: "Estratégia", ano: 2010 },
+            { titulo: "Crackdown", genero: "Ação", ano: 2007 },
+            { titulo: "Crackdown 2", genero: "Ação", ano: 2010 },
+            { titulo: "Crimson Skies: High Road to Revenge", genero: "Ação/Voo", ano: 2003 },
+            { titulo: "Dance Central", genero: "Dança/Casual", ano: 2010 },
+            { titulo: "Dance Central 2", genero: "Dança/Casual", ano: 2011 },
+            { titulo: "Dance Central 3", genero: "Dança/Casual", ano: 2012 },
+            { titulo: "Dante's Inferno", genero: "Ação/Aventura", ano: 2010 },
+            { titulo: "Dark Souls", genero: "RPG/Ação", ano: 2011 },
+            { titulo: "Dark Souls II", genero: "RPG/Ação", ano: 2014 },
+            { titulo: "Dawn of War", genero: "Estratégia", ano: 2004 },
+            { titulo: "Dawn of War II", genero: "Estratégia", ano: 2009 },
+            { titulo: "Dawn of War II: Chaos Rising", genero: "Estratégia", ano: 2010 },
+            { titulo: "Dead Space", genero: "Horror/Ação", ano: 2008 },
+            { titulo: "Dead Space 2", genero: "Horror/Ação", ano: 2011 },
+            { titulo: "Dead Space 3", genero: "Horror/Ação", ano: 2013 },
+            { titulo: "Demon's Souls", genero: "RPG/Ação", ano: 2009 },
+            { titulo: "Deus Ex: Human Revolution", genero: "FPS/RPG", ano: 2011 },
+            { titulo: "Deus Ex: The Fall", genero: "FPS/RPG", ano: 2014 },
+            { titulo: "Devil May Cry 4", genero: "Ação", ano: 2008 },
+            { titulo: "Devil May Cry 5", genero: "Ação", ano: 2019 },
+            { titulo: "Dirt 2", genero: "Corrida", ano: 2009 },
+            { titulo: "Dirt 3", genero: "Corrida", ano: 2011 },
+            { titulo: "DIRT", genero: "Corrida", ano: 2009 },
+            { titulo: "Divinity II", genero: "RPG/Ação", ano: 2009 },
+            { titulo: "DOOM 3", genero: "FPS/Horror", ano: 2004 },
+            { titulo: "DOOM 3: BFG Edition", genero: "FPS/Horror", ano: 2012 },
+            { titulo: "Dragon Age II", genero: "RPG/Fantasia", ano: 2011 },
+            { titulo: "Dragon Age: Inquisition", genero: "RPG/Fantasia", ano: 2014 },
+            { titulo: "Dragon Age: Origins", genero: "RPG/Fantasia", ano: 2009 },
+            { titulo: "Enchanted Arms", genero: "RPG/JRPG", ano: 2005 },
+            { titulo: "Enslaved: Odyssey to the West", genero: "Ação/Aventura", ano: 2010 },
+            { titulo: "Eternal Sonata", genero: "RPG/JRPG", ano: 2007 },
+            { titulo: "Evil Dead: A Fistful of Boomstick", genero: "Horror/Ação", ano: 2003 },
+            { titulo: "Evil Within, The", genero: "Horror/Ação", ano: 2014 },
+            { titulo: "Fable", genero: "RPG/Ação", ano: 2004 },
+            { titulo: "Fable II", genero: "RPG/Ação", ano: 2008 },
+            { titulo: "Fable III", genero: "RPG/Ação", ano: 2010 },
+            { titulo: "Fable Anniversary", genero: "RPG/Ação", ano: 2014 },
+            { titulo: "Fallout 3", genero: "RPG/Ação", ano: 2008 },
+            { titulo: "Fallout: New Vegas", genero: "RPG/Ação", ano: 2010 },
+            { titulo: "F.E.A.R.", genero: "Horror/FPS", ano: 2005 },
+            { titulo: "F.E.A.R. 2: Project Origin", genero: "Horror/FPS", ano: 2009 },
+            { titulo: "F.E.A.R. 3", genero: "Horror/FPS", ano: 2011 },
+            { titulo: "FIFA 08", genero: "Esportes/Futebol", ano: 2007 },
+            { titulo: "FIFA 09", genero: "Esportes/Futebol", ano: 2008 },
+            { titulo: "FIFA 10", genero: "Esportes/Futebol", ano: 2009 },
+            { titulo: "FIFA 11", genero: "Esportes/Futebol", ano: 2010 },
+            { titulo: "FIFA 12", genero: "Esportes/Futebol", ano: 2011 },
+            { titulo: "FIFA 13", genero: "Esportes/Futebol", ano: 2012 },
+            { titulo: "FIFA 14", genero: "Esportes/Futebol", ano: 2013 },
+            { titulo: "FIFA 15", genero: "Esportes/Futebol", ano: 2014 },
+            { titulo: "Forza Horizon", genero: "Corrida", ano: 2012 },
+            { titulo: "Forza Horizon 2", genero: "Corrida", ano: 2014 },
+            { titulo: "Forza Motorsport", genero: "Corrida", ano: 2005 },
+            { titulo: "Forza Motorsport 2", genero: "Corrida", ano: 2007 },
+            { titulo: "Forza Motorsport 3", genero: "Corrida", ano: 2009 },
+            { titulo: "Forza Motorsport 4", genero: "Corrida", ano: 2011 },
+            { titulo: "Forza Motorsport 5", genero: "Corrida", ano: 2013 },
+            { titulo: "Forza Motorsport Legends", genero: "Corrida", ano: 2014 },
+            { titulo: "Geometry Wars", genero: "Arcade", ano: 2005 },
+            { titulo: "Geometry Wars 2", genero: "Arcade", ano: 2008 },
+            { titulo: "Ghost Recon Advanced Warfighter", genero: "Ação/Tático", ano: 2006 },
+            { titulo: "Ghost Recon Advanced Warfighter 2", genero: "Ação/Tático", ano: 2007 },
+            { titulo: "Ghost Recon Future Soldier", genero: "Ação/Tático", ano: 2012 },
+            { titulo: "God of War III", genero: "Ação", ano: 2010 },
+            { titulo: "God of War: Ascension", genero: "Ação", ano: 2013 },
+            { titulo: "Grid", genero: "Corrida", ano: 2008 },
+            { titulo: "Grid 2", genero: "Corrida", ano: 2013 },
+            { titulo: "Green Lantern: Rise of the Manhunters", genero: "Ação/Aventura", ano: 2011 },
+            { titulo: "Guilty Gear Xrd", genero: "Luta", ano: 2014 },
+            { titulo: "GTA IV", genero: "Ação/Aventura", ano: 2008 },
+            { titulo: "GTA: Chinatown Wars", genero: "Ação/Aventura", ano: 2009 },
+            { titulo: "GTA: Episodes from Liberty City", genero: "Ação/Aventura", ano: 2009 },
+            { titulo: "Halo 3", genero: "Ação/FPS", ano: 2007 },
+            { titulo: "Halo 3: ODST", genero: "Ação/FPS", ano: 2009 },
+            { titulo: "Halo 4", genero: "Ação/FPS", ano: 2012 },
+            { titulo: "Halo Combat Evolved Anniversary", genero: "Ação/FPS", ano: 2011 },
+            { titulo: "Halo Reach", genero: "Ação/FPS", ano: 2010 },
+            { titulo: "Halo Wars", genero: "Estratégia", ano: 2009 },
+            { titulo: "Hulk", genero: "Ação/Aventura", ano: 2003 },
+            { titulo: "IL-2 Sturmovik: Birds of Prey", genero: "Simulação/Voo", ano: 2009 },
+            { titulo: "Iron Man", genero: "Ação/Aventura", ano: 2008 },
+            { titulo: "Iron Man 2", genero: "Ação/Aventura", ano: 2010 },
+            { titulo: "Just Cause", genero: "Ação/Aventura", ano: 2006 },
+            { titulo: "Just Cause 2", genero: "Ação/Aventura", ano: 2010 },
+            { titulo: "Just Dance 2014", genero: "Dança/Casual", ano: 2013 },
+            { titulo: "Just Dance 3", genero: "Dança/Casual", ano: 2011 },
+            { titulo: "Just Dance 4", genero: "Dança/Casual", ano: 2012 },
+            { titulo: "Kameo: Elements of Power", genero: "Aventura/Ação", ano: 2005 },
+            { titulo: "Killer Instinct", genero: "Luta", ano: 2013 },
+            { titulo: "Kinect Adventures", genero: "Casual", ano: 2010 },
+            { titulo: "Kinect Sports", genero: "Esportes/Casual", ano: 2010 },
+            { titulo: "Kinect Sports Season Two", genero: "Esportes/Casual", ano: 2011 },
+            { titulo: "Kingdoms of Amalur: Reckoning", genero: "RPG/Ação", ano: 2012 },
+            { titulo: "Last Remnant", genero: "RPG/JRPG", ano: 2008 },
+            { titulo: "Left 4 Dead", genero: "Ação/Cooperativo", ano: 2008 },
+            { titulo: "Left 4 Dead 2", genero: "Ação/Cooperativo", ano: 2009 },
+            { titulo: "Legend of Spyro, The: A New Beginning", genero: "Aventura/Ação", ano: 2006 },
+            { titulo: "LittleBigPlanet 2", genero: "Plataforma/Criação", ano: 2011 },
+            { titulo: "LittleBigPlanet Vita", genero: "Plataforma/Criação", ano: 2012 },
+            { titulo: "Lost Odyssey", genero: "RPG/JRPG", ano: 2007 },
+            { titulo: "Madden NFL 23", genero: "Esportes/Futebol Americano", ano: 2011 },
+            { titulo: "Madden NFL 24", genero: "Esportes/Futebol Americano", ano: 2012 },
+            { titulo: "Madden NFL 25", genero: "Esportes/Futebol Americano", ano: 2013 },
+            { titulo: "Marvel vs. Capcom 3", genero: "Luta", ano: 2011 },
+            { titulo: "Marvel vs. Capcom: Infinite", genero: "Luta", ano: 2017 },
+            { titulo: "Marvel: Ultimate Alliance", genero: "RPG/Ação", ano: 2006 },
+            { titulo: "Marvel: Ultimate Alliance 2", genero: "RPG/Ação", ano: 2009 },
+            { titulo: "Mass Effect", genero: "RPG/Ficção Científica", ano: 2007 },
+            { titulo: "Mass Effect 2", genero: "RPG/Ficção Científica", ano: 2010 },
+            { titulo: "Mass Effect 3", genero: "RPG/Ficção Científica", ano: 2012 },
+            { titulo: "Michael Jackson: The Experience", genero: "Dança/Casual", ano: 2010 },
+            { titulo: "Minecraft", genero: "Sandbox", ano: 2011 },
+            { titulo: "MLB 2K12", genero: "Esportes/Baseball", ano: 2011 },
+            { titulo: "Mortal Kombat 9", genero: "Luta", ano: 2011 },
+            { titulo: "Mortal Kombat vs. DC Universe", genero: "Luta", ano: 2008 },
+            { titulo: "MotoGP 13", genero: "Corrida", ano: 2012 },
+            { titulo: "NBA 2K10", genero: "Esportes/Basquete", ano: 2009 },
+            { titulo: "NBA 2K11", genero: "Esportes/Basquete", ano: 2010 },
+            { titulo: "NBA 2K12", genero: "Esportes/Basquete", ano: 2011 },
+            { titulo: "NBA 2K13", genero: "Esportes/Basquete", ano: 2012 },
+            { titulo: "NBA 2K14", genero: "Esportes/Basquete", ano: 2013 },
+            { titulo: "NBA Jam", genero: "Esportes/Basquete", ano: 2010 },
+            { titulo: "NBA Live 10", genero: "Esportes/Basquete", ano: 2009 },
+            { titulo: "Need for Speed Carbon", genero: "Corrida/Ação", ano: 2006 },
+            { titulo: "Need for Speed: Most Wanted", genero: "Corrida/Ação", ano: 2005 },
+            { titulo: "Need for Speed: ProStreet", genero: "Corrida", ano: 2007 },
+            { titulo: "Need for Speed: Rivals", genero: "Corrida/Ação", ano: 2013 },
+            { titulo: "Need for Speed: Shift", genero: "Corrida", ano: 2009 },
+            { titulo: "Need for Speed: Shift 2 Unleashed", genero: "Corrida", ano: 2011 },
+            { titulo: "Need for Speed: The Run", genero: "Corrida/Ação", ano: 2011 },
+            { titulo: "Need for Speed: Underground 2", genero: "Corrida", ano: 2004 },
+            { titulo: "NHL 13", genero: "Esportes/Hockey", ano: 2012 },
+            { titulo: "NHL 14", genero: "Esportes/Hockey", ano: 2013 },
+            { titulo: "Perfect Dark Zero", genero: "FPS/Ação", ano: 2005 },
+            { titulo: "PGA Tour 2K12", genero: "Esportes/Golf", ano: 2011 },
+            { titulo: "PGA Tour 2K13", genero: "Esportes/Golf", ano: 2012 },
+            { titulo: "Portal 2", genero: "Puzzle", ano: 2011 },
+            { titulo: "Prince of Persia", genero: "Plataforma/Ação", ano: 2008 },
+            { titulo: "Pro Evolution Soccer 2013", genero: "Esportes/Futebol", ano: 2012 },
+            { titulo: "Pro Evolution Soccer 2014", genero: "Esportes/Futebol", ano: 2013 },
+            { titulo: "Pro Evolution Soccer 2015", genero: "Esportes/Futebol", ano: 2014 },
+            { titulo: "Project Gotham Racing", genero: "Corrida", ano: 2005 },
+            { titulo: "Project Gotham Racing 2", genero: "Corrida", ano: 2003 },
+            { titulo: "Project Gotham Racing 3", genero: "Corrida", ano: 2005 },
+            { titulo: "Project Gotham Racing 4", genero: "Corrida", ano: 2007 },
+            { titulo: "Prototype", genero: "Ação/Aventura", ano: 2009 },
+            { titulo: "Prototype 2", genero: "Ação/Aventura", ano: 2012 },
+            { titulo: "Ratchet & Clank Future: Tools of Destruction", genero: "Aventura/Ação", ano: 2007 },
+            { titulo: "Rage", genero: "FPS/Ação", ano: 2011 },
+            { titulo: "Rainbow Six Siege", genero: "Ação/Tático", ano: 2015 },
+            { titulo: "Rainbow Six Vegas", genero: "Ação/Tático", ano: 2006 },
+            { titulo: "Rainbow Six Vegas 2", genero: "Ação/Tático", ano: 2008 },
+            { titulo: "Resident Evil 5", genero: "Horror/Ação", ano: 2009 },
+            { titulo: "Resident Evil 6", genero: "Horror/Ação", ano: 2012 },
+            { titulo: "Resident Evil Revelations", genero: "Horror/Ação", ano: 2012 },
+            { titulo: "Sacred 2", genero: "RPG/Ação", ano: 2008 },
+            { titulo: "Saints Row", genero: "Ação/Aventura", ano: 2006 },
+            { titulo: "Saints Row 2", genero: "Ação/Aventura", ano: 2008 },
+            { titulo: "Saints Row IV", genero: "Ação/Aventura", ano: 2013 },
+            { titulo: "Saints Row: Gat out of Hell", genero: "Ação/Aventura", ano: 2015 },
+            { titulo: "Saints Row: The Third", genero: "Ação/Aventura", ano: 2011 },
+            { titulo: "SBK Superbike World Championship 2008", genero: "Corrida", ano: 2008 },
+            { titulo: "Shape Up", genero: "Fitness/Casual", ano: 2013 },
+            { titulo: "Shadowrun", genero: "FPS/Ação", ano: 2007 },
+            { titulo: "Silent Hill: Homecoming", genero: "Horror/Ação", ano: 2008 },
+            { titulo: "Siren: Blood Curse", genero: "Horror/Ação", ano: 2008 },
+            { titulo: "Skyrim: The Elder Scrolls V", genero: "RPG/Ação", ano: 2011 },
+            { titulo: "Sonic Generations", genero: "Plataforma/Ação", ano: 2011 },
+            { titulo: "Sonic the Hedgehog", genero: "Plataforma/Ação", ano: 2006 },
+            { titulo: "Sonic Unleashed", genero: "Plataforma/Ação", ano: 2008 },
+            { titulo: "Soul Calibur IV", genero: "Luta", ano: 2008 },
+            { titulo: "Soul Calibur V", genero: "Luta", ano: 2012 },
+            { titulo: "Spore", genero: "Simulação/Criação", ano: 2008 },
+            { titulo: "Spider-Man: Shattered Dimensions", genero: "Aventura/Ação", ano: 2010 },
+            { titulo: "Spider-Man: Web of Shadows", genero: "Aventura/Ação", ano: 2008 },
+            { titulo: "Spyro: A Hero's Tail", genero: "Aventura/Ação", ano: 2004 },
+            { titulo: "StarCraft II: Heart of the Swarm", genero: "Estratégia", ano: 2013 },
+            { titulo: "StarCraft II: Wings of Liberty", genero: "Estratégia", ano: 2010 },
+            { titulo: "Starship Troopers", genero: "Ação/Tiro", ano: 2005 },
+            { titulo: "Street Fighter IV", genero: "Luta", ano: 2008 },
+            { titulo: "Street Fighter V", genero: "Luta", ano: 2016 },
+            { titulo: "Street Fighter X Tekken", genero: "Luta", ano: 2012 },
+            { titulo: "Super Smash Bros. Brawl", genero: "Luta", ano: 2008 },
+            { titulo: "Supreme Commander", genero: "Estratégia", ano: 2007 },
+            { titulo: "Supreme Commander 2", genero: "Estratégia", ano: 2010 },
+            { titulo: "Tales of Vesperia", genero: "RPG/JRPG", ano: 2008 },
+            { titulo: "Takedown: Red Sabre", genero: "Ação/Tático", ano: 2013 },
+            { titulo: "Tekken 6", genero: "Luta", ano: 2009 },
+            { titulo: "Tekken Tag Tournament 2", genero: "Luta", ano: 2011 },
+            { titulo: "Terminator 3: The Redemption", genero: "Ação/Tiro", ano: 2004 },
+            { titulo: "Terminator Salvation", genero: "Ação/Tiro", ano: 2009 },
+            { titulo: "Test Drive Unlimited", genero: "Corrida", ano: 2006 },
+            { titulo: "Test Drive Unlimited 2", genero: "Corrida", ano: 2011 },
+            { titulo: "The Sims 3", genero: "Simulação/Vida", ano: 2009 },
+            { titulo: "The Sims 3: Ambitions", genero: "Simulação/Vida", ano: 2010 },
+            { titulo: "Thor: God of Thunder", genero: "Ação/Aventura", ano: 2011 },
+            { titulo: "Tomb Raider", genero: "Aventura/Ação", ano: 2013 },
+            { titulo: "Tomb Raider Legend", genero: "Aventura/Ação", ano: 2006 },
+            { titulo: "Tomb Raider: Underworld", genero: "Aventura/Ação", ano: 2008 },
+            { titulo: "Torchlight", genero: "RPG/Ação", ano: 2009 },
+            { titulo: "Torchlight II", genero: "RPG/Ação", ano: 2012 },
+            { titulo: "Total War: Napoleon", genero: "Estratégia", ano: 2009 },
+            { titulo: "Total War: Shogun 2", genero: "Estratégia", ano: 2011 },
+            { titulo: "Transformers: Dark of the Moon", genero: "Ação/Aventura", ano: 2011 },
+            { titulo: "Transformers: Revenge of the Fallen", genero: "Ação/Aventura", ano: 2009 },
+            { titulo: "Two Worlds", genero: "RPG/Ação", ano: 2007 },
+            { titulo: "UFC 2009: Undisputed", genero: "Esportes/Luta", ano: 2009 },
+            { titulo: "UFC 2010: Undisputed", genero: "Esportes/Luta", ano: 2010 },
+            { titulo: "UFC Undisputed 3", genero: "Esportes/Luta", ano: 2011 },
+            { titulo: "Ultimate Marvel vs. Capcom 3", genero: "Luta", ano: 2011 },
+            { titulo: "Uncharted 2: Among Thieves", genero: "Aventura/Ação", ano: 2009 },
+            { titulo: "Uncharted 3: Drake's Deception", genero: "Aventura/Ação", ano: 2011 },
+            { titulo: "Unreal Tournament 3", genero: "FPS/Ação", ano: 2007 },
+            { titulo: "Viva Piñata", genero: "Aventura/Casual", ano: 2006 },
+            { titulo: "Viva Piñata: Trouble in Paradise", genero: "Aventura/Casual", ano: 2008 },
+            { titulo: "Warhammer 40,000: Dawn of War", genero: "Estratégia", ano: 2004 },
+            { titulo: "Warhawk", genero: "Ação/Voo", ano: 2007 },
+            { titulo: "Witcher 2, The", genero: "RPG/Ação", ano: 2012 },
+            { titulo: "Witcher, The", genero: "RPG/Ação", ano: 2007 },
+            { titulo: "Wolfenstein", genero: "FPS/Ação", ano: 2009 },
+            { titulo: "WWE Smackdown vs. Raw 2011", genero: "Esportes/Luta", ano: 2010 },
+            { titulo: "WWE Smackdown vs. Raw 2013", genero: "Esportes/Luta", ano: 2012 },
+            { titulo: "X-Men Legends II: Rise of Apocalypse", genero: "RPG/Ação", ano: 2005 },
+            { titulo: "X-Men: The Official Game", genero: "Ação/Aventura", ano: 2006 },
+            { titulo: "Your Shape: Fitness Evolved", genero: "Fitness/Casual", ano: 2010 },
+            { titulo: "Zumba Fitness", genero: "Fitness/Casual", ano: 2010 },
+            { titulo: "Zumba Fitness 2", genero: "Fitness/Casual", ano: 2011 },
+            { titulo: "Zumba World Party", genero: "Dança/Casual", ano: 2012 },
+        ];
+
+        const generos = [...new Set(JOGOS.map(j => j.genero.split('/')[0]))].sort();
+        let filtroAtivo = null;
+        const selecionados = new Set();
+        let jogosFiltrados = JOGOS;
+
+        function renderGeneros() {
+            const container = document.getElementById('controles');
+            container.innerHTML = '<button class="btn-genero ativo" data-genero="todos">Todos</button>';
+            generos.forEach(g => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-genero';
+                btn.textContent = g;
+                btn.dataset.genero = g;
+                btn.addEventListener('click', () => filtrar(g));
+                container.appendChild(btn);
+            });
+            document.querySelector('[data-genero="todos"]').addEventListener('click', () => filtrar(null));
+        }
+
+        function filtrar(genero) {
+            filtroAtivo = genero;
+            document.querySelectorAll('.btn-genero').forEach(b => b.classList.remove('ativo'));
+            document.querySelector(`[data-genero="${genero || 'todos'}"]`).classList.add('ativo');
+            aplicarFiltros();
+        }
+
+        function buscar(termo) {
+            const busca = termo.toLowerCase();
+            aplicarFiltros(busca);
+        }
+
+        function aplicarFiltros(termo = '') {
+            jogosFiltrados = JOGOS.filter(jogo => {
+                const passaGenero = !filtroAtivo || jogo.genero.includes(filtroAtivo);
+                const passaBusca = !termo || jogo.titulo.toLowerCase().includes(termo);
+                return passaGenero && passaBusca;
+            });
+            renderJogos();
+        }
+
+        function renderJogos() {
+            const container = document.getElementById('listaJogos');
+            const semResultados = document.getElementById('semResultados');
+
+            if (jogosFiltrados.length === 0) {
+                container.innerHTML = '';
+                semResultados.style.display = 'block';
+                return;
+            }
+
+            semResultados.style.display = 'none';
+            container.innerHTML = jogosFiltrados.map((jogo, idx) => `
+                <div class="jogo">
+                    <input type="checkbox" id="jogo-${idx}" data-titulo="${jogo.titulo}" ${selecionados.has(jogo.titulo) ? 'checked' : ''}>
+                    <label for="jogo-${idx}" style="cursor: pointer; flex: 1;">
+                        <div class="jogo-titulo">${jogo.titulo}</div>
+                        <div class="jogo-meta">${jogo.genero} • ${jogo.ano}</div>
+                    </label>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const titulo = e.target.dataset.titulo;
+                    if (e.target.checked) selecionados.add(titulo);
+                    else selecionados.delete(titulo);
+                    atualizarContador();
+                });
+            });
+        }
+
+        function atualizarContador() {
+            document.getElementById('total').textContent = selecionados.size;
+            document.getElementById('btnOrcamento').disabled = selecionados.size === 0;
+        }
+
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            buscar(e.target.value);
+        });
+
+        document.getElementById('btnOrcamento').addEventListener('click', () => {
+            if (selecionados.size === 0) return;
+
+            const lista = Array.from(selecionados).sort().map((t, i) => `${i + 1}. ${t}`).join('%0A');
+            const msg = `Olá! Gostaria de orçamento para um HD com os seguintes ${selecionados.size} jogos:%0A%0A${lista}%0A%0APode me passar a proposta?`;
+            const wa_url = `https://wa.me/5541997494895?text=${msg}`;
+            window.open(wa_url, '_blank');
+        });
+
+        renderGeneros();
+        renderJogos();
+    </script>
+
+    <style>
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+    </style>
+</body>
+</html>
